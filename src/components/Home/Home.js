@@ -9,6 +9,7 @@ class Home extends React.Component {
 
   constructor(props) {
     super(props);
+    this.gh = props.service;
     this.state = {
       title: 'Event Feed',
       selected: 'public',
@@ -17,30 +18,10 @@ class Home extends React.Component {
         {title: "Event Type", field: "type"},
         {title: "Username", field: "actor.login", render: rowData => <ActorRow actor={rowData.actor}></ActorRow>}
       ],
-      tableData: []
+      tableData: [],
+      detail: null
     };
     
-  }
-
-  eventTypeChange = changeEvent => {
-    this.setState({selected: changeEvent.target.value});
-  }
-
-  click = repo => {
-    console.log(repo);
-    window.open(`https://github.com/${repo}`);
-  };
-  
-  getEventData(){
-    fetch("https://api.github.com/events").then(res => res.json())
-      .then(data => {
-        console.log(data);
-        this.setState({tableData: data});
-      });
-  }
-
-  componentDidMount(){
-    this.getEventData();
   }
 
   render() {
@@ -61,12 +42,42 @@ class Home extends React.Component {
         </Row>
         <Row>
           <Col>
-            <MaterialTable title="Events" columns={this.state.tableCols} data={this.state.tableData}></MaterialTable>
+            <MaterialTable title="Events" columns={this.state.tableCols} data={this.state.tableData}
+              actions={[
+                {
+                  tooltip: 'Show Event Details',
+                  icon: 'chevron_right',
+                  position: 'row',
+                  onClick: (evt, data) => this.setDetail(data)
+                }
+              ]}
+            ></MaterialTable>
           </Col>
         </Row>
+            <Row><Col>{this.state.detail && <span>{this.state.detail.id}</span>}</Col></Row>
       </Container>
     </Jumbotron>
     );
+  }
+
+  eventTypeChange = changeEvent => {
+    let selected = changeEvent.target.value;
+    this.gh.getEventData(selected).then(data =>  {
+      this.setState({selected: selected, tableData: data})
+    });
+  }
+
+  setDetail = data => {
+    console.log(data);
+    this.setState({detail: data});
+  }
+
+  click = repo => {
+    window.open(`https://github.com/${repo}`);
+  };
+
+  componentDidMount(){
+    this.gh.getEventData(this.state.selected).then(data =>this.setState({tableData: data}));
   }
 }
 
