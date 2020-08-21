@@ -4,6 +4,7 @@ import { Container, Row, Col, Jumbotron } from 'react-bootstrap';
 import MaterialTable from 'material-table';
 import ActorRow from '../stateless/ActorRow';
 import RepoLink from '../stateless/RepoLink';
+import Details from '../Details/Details';
 
 class Home extends React.Component {
 
@@ -25,9 +26,14 @@ class Home extends React.Component {
   }
 
   render() {
-    return (
-      <Jumbotron fluid>
-        <Container fluid>
+
+    let content;
+    if(this.state.detail) {
+      content = <Details></Details>
+    }
+    else {
+      content = 
+      <Container fluid>
         <Row>
         <Col><h1>{this.state.title}</h1></Col>
         </Row>
@@ -54,9 +60,13 @@ class Home extends React.Component {
             ></MaterialTable>
           </Col>
         </Row>
-            <Row><Col>{this.state.detail && <span>{this.state.detail.id}</span>}</Col></Row>
       </Container>
-    </Jumbotron>
+    }
+
+    return (
+      <Jumbotron fluid>
+        {content}
+      </Jumbotron>
     );
   }
 
