@@ -1,13 +1,15 @@
 import React from 'react';
-import Home from './components/Home/Home';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import GhService from './GhService';
 import './App.css';
+import MyNav from './components/MyNav/MyNav';
 
 function App() {
   return (
-    <div className="App">
-      <Home service={GhService}/>
-    </div>
+    <Router>
+      <MyNav service={GhService}/>
+    </Router>
+    
   );
 }
 

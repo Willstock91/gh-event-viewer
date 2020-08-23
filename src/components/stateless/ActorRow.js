@@ -8,6 +8,10 @@ const styles = {
     'marginRight': '10px'
 };
 
-const ActorRow = props => (<span><img alt="avatar" style={styles} src={props.actor.avatar_url}/>{props.actor.login}</span>);
+const ActorRow = props => {
+    let url = props.actor ? props.actor.avatar_url : props.avatar_url;
+    let login = props.actor ? props.actor.login : props.login;
+    return (<span><img alt="avatar" style={styles} src={url}/>{login}</span>);
+}
 
 export default ActorRow;

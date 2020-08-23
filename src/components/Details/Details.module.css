@@ -1,0 +1,8 @@
+.root {
+    width: 345px;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}
