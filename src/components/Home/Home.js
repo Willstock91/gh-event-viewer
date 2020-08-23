@@ -20,10 +20,8 @@ class Home extends React.Component {
         {title: "Username", field: "actor.login", render: rowData => <ActorRow actor={rowData.actor}></ActorRow>}
       ],
       tableData: [],
-      detail: null, 
-      user: props.user
+      detail: null
     };
-    
   }
 
   render() {
@@ -40,7 +38,7 @@ class Home extends React.Component {
         </Row>
         <Row>
           <Col md={10}></Col>
-          {this.state.user && 
+          {this.props.user && 
           <Col md={2}>
             <div className={styles.res}>
               <label className={styles.spacing}><input type="radio" name="selected" value="public" checked={this.state.selected === 'public'} onChange={this.eventTypeChange}/> Public</label>
@@ -80,14 +78,13 @@ class Home extends React.Component {
 
   eventTypeChange = changeEvent => {
     let selected = changeEvent.target.value;
-    let promise = selected === 'public' ? this.gh.getEventData() : this.gh.getEventsForUser(this.state.user.login);
+    let promise = selected === 'public' ? this.gh.getEventData() : this.gh.getEventsForUser(this.props.user.login);
     promise.then(data =>  {
       this.setState({selected: selected, tableData: data})
     });
   }
 
   setDetail = data => {
-    console.log(data);
     this.setState({detail: data});
   }
 
@@ -103,7 +100,17 @@ class Home extends React.Component {
     this.gh.getEventData(this.state.selected).then(data => {
       this.setState({tableData: data});
     });
+    
   }
+
+  componentDidUpdate() {
+    if(!this.props.user && this.state.selected != 'public') {
+      this.gh.getEventData().then(data => {
+        this.setState({selected: 'public', tableData: data});
+      })
+    }
+  }
+
 }
 
 export default Home;

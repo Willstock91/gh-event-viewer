@@ -1,7 +1,7 @@
 import React from 'react';
 import ActorRow from '../stateless/ActorRow';
 import { Navbar, Button, Nav, NavDropdown, Container } from 'react-bootstrap';
-import { useHistory, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import styles from './MyNav.module.css';
 import Home from '../Home/Home';
 import Auth from '../Auth/Auth';
